@@ -1,0 +1,39 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Identity {
+  id          Int      @id @default(autoincrement())
+  employeeId  String   @unique // Mã nhân viên
+  fullName    String   // Họ và tên
+  email       String   // Email
+  department  String   // Phòng ban
+  luckyNumber String   @unique // Số may mắn
+  createdAt   DateTime @default(now())
+
+  // Quan hệ 1-1 với bảng câu hỏi
+  question    Question?
+}
+
+model Question {
+  id             Int      @id @default(autoincrement())
+  wishes         String?  // Lời chúc
+  selectedImages String[] // Lựa chọn 3 ảnh
+  createdAt      DateTime @default(now())
+
+  // Khóa ngoại liên kết tới Identity
+  identityId     Int      @unique
+  identity       Identity @relation(fields: [identityId], references: [id], onDelete: Cascade)
+}
+
+model AppConfig {
+  id            Int      @id @default(1)
+  questionTitle String   @default("Chọn 3 bức ảnh bạn thích nhất")
+  images        Json     @default("[]") // mảng các object string { id, url, title }
+  updatedAt     DateTime @updatedAt
+}

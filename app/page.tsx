@@ -212,7 +212,100 @@ export default function Home() {
 
       <div className="container" style={{ position: "relative", zIndex: 10 }}>
         <div className="card">
-          {success ? (
+          {isFormClosed ? (
+            <div
+              className="result"
+              style={{ textAlign: "center", padding: "40px 20px" }}
+            >
+              <div
+                style={{
+                  fontSize: "48px",
+                  letterSpacing: "12px",
+                  marginBottom: "20px",
+                }}
+              >
+                🌸 🌺 🌷 🌹 🌸
+              </div>
+              <h1
+                style={{
+                  fontSize: "36px",
+                  fontWeight: 900,
+                  background:
+                    "linear-gradient(135deg, #d63384, #6f42c1, #d63384)",
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                  textShadow: "none",
+                  letterSpacing: "2px",
+                  margin: "10px 0 20px",
+                  lineHeight: 1.3,
+                }}
+              >
+                Thời gian bình chọn đã kết thúc!
+              </h1>
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: "12px",
+                  margin: "20px auto",
+                  maxWidth: "320px",
+                }}
+              >
+                <div
+                  style={{
+                    flex: 1,
+                    height: "2px",
+                    background:
+                      "linear-gradient(to right, transparent, #d63384)",
+                  }}
+                />
+                <span style={{ fontSize: "22px" }}>✨</span>
+                <div
+                  style={{
+                    flex: 1,
+                    height: "2px",
+                    background:
+                      "linear-gradient(to left, transparent, #d63384)",
+                  }}
+                />
+              </div>
+              <p
+                style={{
+                  fontSize: "18px",
+                  color: "#555",
+                  lineHeight: 1.8,
+                  maxWidth: "480px",
+                  margin: "20px auto",
+                }}
+              >
+                Cảm ơn tất cả các bạn đã tham gia bình chọn tác phẩm ấn tượng và
+                sáng tạo nhân ngày{" "}
+                <strong style={{ color: "#d63384" }}>Quốc tế Phụ nữ 8/3</strong>
+                .
+              </p>
+              <p
+                style={{
+                  fontSize: "16px",
+                  color: "#6f42c1",
+                  fontWeight: 600,
+                  fontStyle: "italic",
+                  margin: "16px 0",
+                }}
+              >
+                Kết quả bình chọn sẽ được công bố sớm nhất! 🎉
+              </p>
+              <div
+                style={{
+                  fontSize: "32px",
+                  letterSpacing: "10px",
+                  marginTop: "24px",
+                }}
+              >
+                💐 ✨ 💖 ✨ 💐
+              </div>
+            </div>
+          ) : success ? (
             <div className="result">
               <h1>Đăng Ký Thành Công! 🎉</h1>
               <p>Cảm ơn bạn đã đăng ký tham gia sự kiện 8/3.</p>

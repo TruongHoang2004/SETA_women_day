@@ -7,7 +7,7 @@ import Confetti from "react-confetti";
 export default function Home() {
   const [config, setConfig] = useState({
     title: "Chọn 3 bức ảnh bạn thích nhất",
-    images: [] as { id: string, url: string, title: string }[]
+    images: [] as { id: string; url: string; title: string }[],
   });
   const [loadingConfig, setLoadingConfig] = useState(true);
   const [formData, setFormData] = useState<{
@@ -28,11 +28,21 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [luckyNum, setLuckyNum] = useState("");
-  const [windowDimensions, setWindowDimensions] = useState({ width: 0, height: 0 });
+  const [windowDimensions, setWindowDimensions] = useState({
+    width: 0,
+    height: 0,
+  });
 
   useEffect(() => {
-    setWindowDimensions({ width: window.innerWidth, height: window.innerHeight });
-    const handleResize = () => setWindowDimensions({ width: window.innerWidth, height: window.innerHeight });
+    setWindowDimensions({
+      width: window.innerWidth,
+      height: window.innerHeight,
+    });
+    const handleResize = () =>
+      setWindowDimensions({
+        width: window.innerWidth,
+        height: window.innerHeight,
+      });
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
@@ -41,7 +51,10 @@ export default function Home() {
     setFormData((prev) => {
       const isSelected = prev.selectedImages.includes(imageId);
       if (isSelected) {
-        return { ...prev, selectedImages: prev.selectedImages.filter((id) => id !== imageId) };
+        return {
+          ...prev,
+          selectedImages: prev.selectedImages.filter((id) => id !== imageId),
+        };
       } else {
         if (prev.selectedImages.length >= 3) {
           return prev; // max 3 selected
@@ -58,7 +71,7 @@ export default function Home() {
         if (data.questionTitle || data.images) {
           setConfig({
             title: data.questionTitle || "Chọn 3 bức ảnh bạn thích nhất",
-            images: Array.isArray(data.images) ? data.images : []
+            images: Array.isArray(data.images) ? data.images : [],
           });
         }
         setLoadingConfig(false);
@@ -69,9 +82,9 @@ export default function Home() {
       });
   }, []);
 
-
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
@@ -80,8 +93,8 @@ export default function Home() {
     setLoading(true);
 
     // Regex check for UX validation
-    if (!/^\d{4}$/.test(formData.employeeId)) {
-      toast.error("Mã nhân viên phải là 4 chữ số.");
+    if (!/^\d{4,5}$/.test(formData.employeeId)) {
+      toast.error("Mã nhân viên phải là 4-5 chữ số.");
       setLoading(false);
       return;
     }
@@ -122,27 +135,60 @@ export default function Home() {
     left: `${Math.random() * 100}vw`,
     animationDuration: `${10 + Math.random() * 15}s`,
     animationDelay: `${Math.random() * 10}s`,
-    fontSize: `${16 + Math.random() * 20}px`
+    fontSize: `${16 + Math.random() * 20}px`,
   }));
 
   if (loadingConfig) {
-    return <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }}>Đang tải cấu hình sự kiện...</div>;
+    return (
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+        }}
+      >
+        Đang tải cấu hình sự kiện...
+      </div>
+    );
   }
 
   return (
     <>
       {/* Confetti if successful */}
-      {success && <Confetti width={windowDimensions.width} height={windowDimensions.height} recycle={false} numberOfPieces={500} />}
+      {success && (
+        <Confetti
+          width={windowDimensions.width}
+          height={windowDimensions.height}
+          recycle={false}
+          numberOfPieces={500}
+        />
+      )}
 
       {/* Background Falling Flowers */}
-      <div style={{ position: "fixed", top: 0, left: 0, width: "100%", height: "100%", overflow: "hidden", zIndex: 0, pointerEvents: "none" }}>
+      <div
+        style={{
+          position: "fixed",
+          top: 0,
+          left: 0,
+          width: "100%",
+          height: "100%",
+          overflow: "hidden",
+          zIndex: 0,
+          pointerEvents: "none",
+        }}
+      >
         {fallingFlowers.map((flower) => (
-          <div key={flower.id} className="falling-flower" style={{
-            left: flower.left,
-            animationDuration: flower.animationDuration,
-            animationDelay: flower.animationDelay,
-            fontSize: flower.fontSize
-          }}>
+          <div
+            key={flower.id}
+            className="falling-flower"
+            style={{
+              left: flower.left,
+              animationDuration: flower.animationDuration,
+              animationDelay: flower.animationDelay,
+              fontSize: flower.fontSize,
+            }}
+          >
             {flower.emoji}
           </div>
         ))}
@@ -176,24 +222,94 @@ export default function Home() {
             </div>
           ) : (
             <>
-              <div style={{ textAlign: "center", marginBottom: "15px" }}>
-                <img src="/seta.png" alt="Seta Logo" style={{ height: "60px", objectFit: "contain" }} />
+              <div style={{ textAlign: "center", marginBottom: "30px" }}>
+                <div
+                  style={{
+                    fontSize: "36px",
+                    letterSpacing: "8px",
+                    marginBottom: "8px",
+                  }}
+                >
+                  🌸 🌺 🌷 🌹 🌸
+                </div>
+                <h1
+                  style={{
+                    fontSize: "42px",
+                    fontWeight: 900,
+                    background:
+                      "linear-gradient(135deg, #d63384, #6f42c1, #d63384)",
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
+                    textShadow: "none",
+                    letterSpacing: "2px",
+                    margin: "10px 0",
+                    lineHeight: 1.2,
+                  }}
+                >
+                  BUILT BY GRACE
+                </h1>
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    gap: "12px",
+                    margin: "16px auto",
+                    maxWidth: "320px",
+                  }}
+                >
+                  <div
+                    style={{
+                      flex: 1,
+                      height: "2px",
+                      background:
+                        "linear-gradient(to right, transparent, #d63384)",
+                    }}
+                  />
+                  <span style={{ fontSize: "18px" }}>✨</span>
+                  <div
+                    style={{
+                      flex: 1,
+                      height: "2px",
+                      background:
+                        "linear-gradient(to left, transparent, #d63384)",
+                    }}
+                  />
+                </div>
+                <p
+                  className="description"
+                  style={{
+                    fontSize: "17px",
+                    fontWeight: 600,
+                    color: "#6f42c1",
+                    letterSpacing: "3px",
+                    textTransform: "uppercase",
+                    margin: 0,
+                  }}
+                >
+                  Bình Chọn Tác Phẩm Ấn Tượng Và Sáng Tạo
+                </p>
+                <div
+                  style={{
+                    fontSize: "28px",
+                    letterSpacing: "8px",
+                    marginTop: "10px",
+                  }}
+                >
+                  💐 ✨ 💖 ✨ 💐
+                </div>
               </div>
-              <h1>Sự Kiện 8/3 💐</h1>
-              <p className="description">
-                Đăng ký thông tin để nhận con số may mắn quay thưởng!
-              </p>
 
               <form onSubmit={handleSubmit}>
                 <div className="form-grid">
                   <div className="form-group">
-                    <label>Mã Nhân Viên (4 chữ số) *</label>
+                    <label>Mã Nhân Viên (4-5 chữ số) *</label>
                     <input
                       type="text"
                       name="employeeId"
                       required
                       placeholder="Ví dụ: 1234"
-                      maxLength={4}
+                      maxLength={5}
                       value={formData.employeeId}
                       onChange={handleChange}
                     />
@@ -248,27 +364,48 @@ export default function Home() {
                   <div className="form-group full-width">
                     <label>
                       {config.title}
-                      <span style={{ fontWeight: 'normal', color: '#666', marginLeft: '8px' }}>
+                      <span
+                        style={{
+                          fontWeight: "normal",
+                          color: "#666",
+                          marginLeft: "8px",
+                        }}
+                      >
                         (Đã chọn {formData.selectedImages.length}/3)
                       </span>
                     </label>
                     <div className="image-grid">
                       {config.images.map((img) => {
-                        const isSelected = formData.selectedImages.includes(img.id);
+                        const isSelected = formData.selectedImages.includes(
+                          img.id,
+                        );
                         return (
                           <div
                             key={img.id}
                             onClick={() => handleImageToggle(img.id)}
                             className={`image-item ${isSelected ? "selected" : ""}`}
                           >
-                            <img src={img.url || "https://via.placeholder.com/400/f8bbd0/ffffff?text=" + encodeURIComponent(img.title)} alt={img.title} />
+                            <img
+                              src={
+                                img.url ||
+                                "https://via.placeholder.com/400/f8bbd0/ffffff?text=" +
+                                  encodeURIComponent(img.title)
+                              }
+                              alt={img.title}
+                            />
                             {isSelected && <div className="check-icon">✓</div>}
-                            <div className="image-title">{img.title}</div>
                           </div>
                         );
                       })}
                     </div>
-                    <p style={{ fontSize: "13px", color: "var(--primary)", marginTop: "8px", fontStyle: "italic" }}>
+                    <p
+                      style={{
+                        fontSize: "13px",
+                        color: "var(--primary)",
+                        marginTop: "8px",
+                        fontStyle: "italic",
+                      }}
+                    >
                       * Nhấp chuột vào ảnh để chọn hoặc bỏ chọn (tối đa 3 ảnh)
                     </p>
                   </div>

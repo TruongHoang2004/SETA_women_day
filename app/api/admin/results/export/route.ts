@@ -1,28 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "../../../../lib/prisma";
+import { prisma } from "../../../../../lib/prisma";
 
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
 
-    // Pagination
-    const page = Math.max(1, parseInt(searchParams.get("page") || "1"));
-    const pageSize = Math.max(
-      1,
-      Math.min(100, parseInt(searchParams.get("pageSize") || "10")),
-    );
-
-    // Search (searches across employeeId, fullName, email, department, luckyNumber)
     const search = searchParams.get("search")?.trim() || "";
-
-    // Filter by department
     const department = searchParams.get("department")?.trim() || "";
-
-    // Sorting
     const sortBy = searchParams.get("sortBy") || "createdAt";
     const sortOrder = searchParams.get("sortOrder") === "asc" ? "asc" : "desc";
 
-    // Build where clause
+    // Build where clause (same as main results route)
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const where: any = {};
 
@@ -55,42 +43,18 @@ export async function GET(request: NextRequest) {
       orderBy = { [sortBy]: sortOrder };
     }
 
-    // Get total count for pagination
-    const totalCount = await prisma.identity.count({ where });
-
-    // Get paginated data
+    // Get ALL matching records (no pagination for export)
     const registrations = await prisma.identity.findMany({
       where,
-      include: {
-        question: true,
-      },
+      include: { question: true },
       orderBy,
-      skip: (page - 1) * pageSize,
-      take: pageSize,
     });
 
-    // Get all distinct departments for the filter dropdown
-    const departments = await prisma.identity.findMany({
-      select: { department: true },
-      distinct: ["department"],
-      orderBy: { department: "asc" },
-    });
-
-    return NextResponse.json({
-      success: true,
-      data: registrations,
-      pagination: {
-        page,
-        pageSize,
-        totalCount,
-        totalPages: Math.ceil(totalCount / pageSize),
-      },
-      departments: departments.map((d) => d.department),
-    });
+    return NextResponse.json({ success: true, data: registrations });
   } catch (error) {
-    console.error("Error fetching results:", error);
+    console.error("Error exporting results:", error);
     return NextResponse.json(
-      { error: "Lỗi hệ thống khi tải thống kê" },
+      { error: "Lỗi hệ thống khi xuất dữ liệu" },
       { status: 500 },
     );
   }

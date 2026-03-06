@@ -1,8 +1,23 @@
 import { NextResponse } from "next/server";
 import { prisma } from "../../../lib/prisma";
 
+// Registration deadline: March 6, 2026 at 17:00 ICT (UTC+7)
+const REGISTRATION_DEADLINE = new Date("2026-03-06T17:00:00+07:00");
+
 export async function POST(request: Request) {
   try {
+    // Check if registration period has ended
+    const now = new Date();
+    if (now >= REGISTRATION_DEADLINE) {
+      return NextResponse.json(
+        {
+          error:
+            "Thời gian bình chọn đã kết thúc. Cảm ơn bạn đã quan tâm đến sự kiện! 🌸",
+        },
+        { status: 403 },
+      );
+    }
+
     const body = await request.json();
     const { employeeId, fullName, email, department, wishes, selectedImages } =
       body;
@@ -86,6 +101,8 @@ export async function POST(request: Request) {
         question: true,
       },
     });
+
+    return NextResponse.json;
 
     return NextResponse.json({
       success: true,

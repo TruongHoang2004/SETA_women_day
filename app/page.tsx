@@ -5,11 +5,14 @@ import { toast } from "react-toastify";
 import Confetti from "react-confetti";
 
 export default function Home() {
+  const REGISTRATION_DEADLINE = new Date("2026-03-06T17:00:00+07:00");
+
   const [config, setConfig] = useState({
     title: "Chọn 3 bức ảnh bạn thích nhất",
     images: [] as { id: string; url: string; title: string }[],
   });
   const [loadingConfig, setLoadingConfig] = useState(true);
+  const [isFormClosed, setIsFormClosed] = useState(false);
   const [formData, setFormData] = useState<{
     employeeId: string;
     fullName: string;
@@ -44,7 +47,20 @@ export default function Home() {
         height: window.innerHeight,
       });
     window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
+
+    // Check if form is closed
+    const checkDeadline = () => {
+      if (new Date() >= REGISTRATION_DEADLINE) {
+        setIsFormClosed(true);
+      }
+    };
+    checkDeadline();
+    const interval = setInterval(checkDeadline, 30000); // Re-check every 30s
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+      clearInterval(interval);
+    };
   }, []);
 
   const handleImageToggle = (imageId: string) => {
